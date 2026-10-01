@@ -1,0 +1,975 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STACK // QUEUE</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --bg: #090708;
+            --panel: #140b0d;
+            --panel-light: #1d0e12;
+            --maroon: #5e1727;
+            --maroon-dark: #350d17;
+            --gold: #d6ad54;
+            --gold-light: #f1d27b;
+            --gold-dark: #927331;
+            --text: #eee4d2;
+            --muted: #9f9180;
+            --danger: #a93245;
+            --border: rgba(214, 173, 84, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Rajdhani", sans-serif;
+            background:
+                radial-gradient(circle at 50% -10%, rgba(94, 23, 39, 0.45), transparent 45%),
+                linear-gradient(135deg, #090708, #12090c 50%, #080607);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(214,173,84,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(214,173,84,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* HEADER */
+
+        header {
+            position: relative;
+            text-align: center;
+            padding: 35px 20px 30px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 6, 8, 0.85);
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 2px;
+            background: var(--gold);
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        .system-label {
+            color: var(--gold);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 12px;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: clamp(36px, 6vw, 62px);
+            letter-spacing: 7px;
+            font-weight: 700;
+            color: var(--gold-light);
+            text-shadow: 0 0 18px rgba(214,173,84,0.35);
+        }
+
+        header p {
+            margin-top: 8px;
+            color: var(--muted);
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 92%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
+
+        /* INPUT TERMINAL */
+
+        .terminal {
+            position: relative;
+            background: linear-gradient(145deg, rgba(29,14,18,0.95), rgba(13,8,10,0.95));
+            border: 1px solid var(--border);
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.35);
+        }
+
+        .terminal::before {
+            content: "INPUT TERMINAL";
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            padding: 0 10px;
+            background: var(--bg);
+            color: var(--gold);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            flex: 1;
+            min-width: 220px;
+            background: #090607;
+            border: 1px solid var(--gold-dark);
+            color: var(--gold-light);
+            padding: 13px 15px;
+            font-family: "Share Tech Mono", monospace;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(214,173,84,0.2);
+        }
+
+        input::placeholder {
+            color: #655c52;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            position: relative;
+            border: 1px solid var(--gold-dark);
+            background: var(--maroon-dark);
+            color: var(--gold-light);
+            padding: 12px 18px;
+            font-family: "Rajdhani", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--maroon);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(214,173,84,0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* TOOLTIP */
+
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            z-index: 20;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            width: max-content;
+            max-width: 250px;
+            padding: 9px 12px;
+            background: #080607;
+            border: 1px solid var(--gold-dark);
+            color: var(--text);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 1.4;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.2s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* STATUS */
+
+        .status {
+            margin-top: 15px;
+            padding: 11px 14px;
+            border-left: 3px solid var(--gold);
+            background: rgba(214,173,84,0.05);
+            color: var(--gold-light);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 12px;
+        }
+
+        /* STRUCTURES */
+
+        .structures {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            position: relative;
+            background: linear-gradient(145deg, rgba(29,14,18,0.96), rgba(12,7,9,0.96));
+            border: 1px solid var(--border);
+            padding: 25px;
+            min-width: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .card::before,
+        .card::after {
+            content: "";
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-color: var(--gold);
+            pointer-events: none;
+        }
+
+        .card::before {
+            top: -1px;
+            left: -1px;
+            border-top: 2px solid;
+            border-left: 2px solid;
+        }
+
+        .card::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 2px solid;
+            border-right: 2px solid;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .card h2 {
+            color: var(--gold-light);
+            font-size: 27px;
+            letter-spacing: 3px;
+        }
+
+        .type-badge {
+            font-family: "Share Tech Mono", monospace;
+            color: var(--gold);
+            font-size: 11px;
+            border: 1px solid var(--gold-dark);
+            padding: 4px 8px;
+        }
+
+        .description {
+            color: var(--muted);
+            margin-bottom: 18px;
+            font-family: "Share Tech Mono", monospace;
+            font-size: 12px;
+        }
+
+        .operation-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        /* STACK */
+
+        .stack-container {
+            min-height: 390px;
+            border: 1px dashed rgba(214,173,84,0.3);
+            background: rgba(5,4,5,0.55);
+            padding: 15px;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+            gap: 7px;
+            position: relative;
+        }
+
+        .stack-container::before {
+            content: "TOP";
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            color: var(--gold-dark);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 10px;
+        }
+
+        /* QUEUE */
+
+        .queue-container {
+            min-height: 150px;
+            border: 1px dashed rgba(214,173,84,0.3);
+            background: rgba(5,4,5,0.55);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .queue-container::before {
+            content: "FRONT";
+            position: absolute;
+            top: 8px;
+            left: 10px;
+            color: var(--gold-dark);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 10px;
+        }
+
+        .queue-container::after {
+            content: "REAR";
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            color: var(--gold-dark);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 10px;
+        }
+
+        /* ITEMS */
+
+        .item {
+            padding: 14px;
+            min-width: 85px;
+            color: var(--gold-light);
+            text-align: center;
+            font-family: "Share Tech Mono", monospace;
+            font-weight: bold;
+            background: linear-gradient(135deg, #5e1727, #3a1019);
+            border: 1px solid var(--gold-dark);
+            box-shadow: inset 0 0 12px rgba(214,173,84,0.05);
+            animation: appear 0.25s ease;
+        }
+
+        .item:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(214,173,84,0.2);
+        }
+
+        .queue-item {
+            background: linear-gradient(135deg, #3f1420, #641b2c);
+        }
+
+        .queue-item-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .queue-label {
+            font-family: "Share Tech Mono", monospace;
+            color: var(--gold-dark);
+            font-size: 9px;
+        }
+
+        .empty {
+            width: 100%;
+            text-align: center;
+            color: #5f554d;
+            padding: 50px 10px;
+            font-family: "Share Tech Mono", monospace;
+            font-size: 12px;
+        }
+
+        /* INFO */
+
+        .info-panel {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-box {
+            border: 1px solid rgba(214,173,84,0.2);
+            background: rgba(29,14,18,0.65);
+            padding: 18px;
+        }
+
+        .info-box h3 {
+            color: var(--gold);
+            font-size: 17px;
+            letter-spacing: 2px;
+            margin-bottom: 7px;
+        }
+
+        .info-box p {
+            color: var(--muted);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: var(--gold-light);
+        }
+
+        /* HISTORY */
+
+        .history {
+            margin-top: 25px;
+        }
+
+        .history h2 {
+            color: var(--gold-light);
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        #historyList {
+            list-style: none;
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px solid rgba(214,173,84,0.15);
+        }
+
+        #historyList li {
+            padding: 10px 13px;
+            border-bottom: 1px solid rgba(214,173,84,0.08);
+            color: var(--muted);
+            font-family: "Share Tech Mono", monospace;
+            font-size: 11px;
+        }
+
+        #historyList li:first-child {
+            color: var(--gold-light);
+        }
+
+        /* ANIMATION */
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* SCROLLBAR */
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #090607;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--maroon);
+            border: 1px solid var(--gold-dark);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+            .structures,
+            .info-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .stack-container {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .input-area {
+                flex-direction: column;
+            }
+
+            input,
+            .btn {
+                width: 100%;
+            }
+
+            header h1 {
+                letter-spacing: 3px;
+            }
+
+            .tooltip::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="system-label">DATA STRUCTURE // INTERFACE</div>
+    <h1>STACK // QUEUE</h1>
+    <p>Interactive Data Structure Terminal</p>
+</header>
+
+<main class="container">
+
+    <!-- INPUT -->
+    <section class="terminal">
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="valueInput"
+                placeholder="ENTER VALUE..."
+                onkeydown="handleEnter(event)"
+            >
+
+            <button
+                class="btn tooltip"
+                data-tooltip="Adds the entered value to the TOP of the Stack."
+                onclick="pushStack()">
+                PUSH
+            </button>
+
+            <button
+                class="btn tooltip"
+                data-tooltip="Adds the entered value to the REAR of the Queue."
+                onclick="enqueue()">
+                ENQUEUE
+            </button>
+
+        </div>
+
+        <div class="status" id="status">
+            SYSTEM READY // Awaiting operation...
+        </div>
+
+    </section>
+
+    <!-- DATA STRUCTURES -->
+    <section class="structures">
+
+        <!-- STACK -->
+        <div class="card">
+
+            <div class="card-header">
+                <h2>STACK</h2>
+                <span class="type-badge">LIFO</span>
+            </div>
+
+            <p class="description">
+                LAST IN // FIRST OUT
+            </p>
+
+            <div class="operation-buttons">
+
+                <button
+                    class="btn tooltip"
+                    data-tooltip="Removes the most recently added item from the TOP of the Stack."
+                    onclick="popStack()">
+                    POP
+                </button>
+
+                <button
+                    class="btn tooltip"
+                    data-tooltip="Displays the TOP item without removing it."
+                    onclick="peekStack()">
+                    PEEK
+                </button>
+
+                <button
+                    class="btn tooltip"
+                    data-tooltip="Removes every item currently stored in the Stack."
+                    onclick="clearStack()">
+                    CLEAR
+                </button>
+
+            </div>
+
+            <div class="stack-container" id="stackContainer">
+                <div class="empty">STACK EMPTY // NO DATA</div>
+            </div>
+
+        </div>
+
+        <!-- QUEUE -->
+        <div class="card">
+
+            <div class="card-header">
+                <h2>QUEUE</h2>
+                <span class="type-badge">FIFO</span>
+            </div>
+
+            <p class="description">
+                FIRST IN // FIRST OUT
+            </p>
+
+            <div class="operation-buttons">
+
+                <button
+                    class="btn tooltip"
+                    data-tooltip="Removes the FIRST item from the FRONT of the Queue."
+                    onclick="dequeue()">
+                    DEQUEUE
+                </button>
+
+                <button
+                    class="btn tooltip"
+                    data-tooltip="Displays the FRONT item without removing it."
+                    onclick="peekQueue()">
+                    FRONT
+                </button>
+
+                <button
+                    class="btn tooltip"
+                    data-tooltip="Removes every item currently stored in the Queue."
+                    onclick="clearQueue()">
+                    CLEAR
+                </button>
+
+            </div>
+
+            <div class="queue-container" id="queueContainer">
+                <div class="empty">QUEUE EMPTY // NO DATA</div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- EXPLANATION -->
+    <section class="info-panel">
+
+        <div class="info-box">
+            <h3>STACK // LIFO</h3>
+            <p>
+                A Stack follows
+                <strong>Last In, First Out</strong>.
+                The newest item is placed at the top and is the first item removed.
+            </p>
+        </div>
+
+        <div class="info-box">
+            <h3>QUEUE // FIFO</h3>
+            <p>
+                A Queue follows
+                <strong>First In, First Out</strong>.
+                The first item added is positioned at the front and is the first item removed.
+            </p>
+        </div>
+
+    </section>
+
+    <!-- HISTORY -->
+    <section class="card history">
+
+        <h2>OPERATION LOG</h2>
+
+        <ul id="historyList">
+            <li>SYSTEM // No operations recorded.</li>
+        </ul>
+
+    </section>
+
+</main>
+
+<script>
+
+    let stack = [];
+    let queue = [];
+
+    // INPUT
+
+    function getInputValue() {
+
+        const input = document.getElementById("valueInput");
+        const value = input.value.trim();
+
+        if (value === "") {
+            showStatus("WARNING // Enter a value before performing this operation.");
+            return null;
+        }
+
+        input.value = "";
+        input.focus();
+
+        return value;
+    }
+
+    function handleEnter(event) {
+
+        if (event.key === "Enter") {
+            pushStack();
+        }
+
+    }
+
+    // STACK
+
+    function pushStack() {
+
+        const value = getInputValue();
+
+        if (value === null) return;
+
+        stack.push(value);
+
+        renderStack();
+
+        showStatus(`STACK // "${value}" pushed to TOP.`);
+        addHistory(`PUSH // ${value}`);
+
+    }
+
+    function popStack() {
+
+        if (stack.length === 0) {
+            showStatus("STACK // Cannot POP. Stack is empty.");
+            return;
+        }
+
+        const value = stack.pop();
+
+        renderStack();
+
+        showStatus(`STACK // "${value}" removed from TOP.`);
+        addHistory(`POP // ${value}`);
+
+    }
+
+    function peekStack() {
+
+        if (stack.length === 0) {
+            showStatus("STACK // No TOP item available.");
+            return;
+        }
+
+        const value = stack[stack.length - 1];
+
+        showStatus(`STACK // TOP = "${value}"`);
+        addHistory(`PEEK STACK // ${value}`);
+
+    }
+
+    function clearStack() {
+
+        stack = [];
+
+        renderStack();
+
+        showStatus("STACK // All data cleared.");
+        addHistory("CLEAR STACK");
+
+    }
+
+    function renderStack() {
+
+        const container = document.getElementById("stackContainer");
+
+        container.innerHTML = "";
+
+        if (stack.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">STACK EMPTY // NO DATA</div>';
+
+            return;
+        }
+
+        stack.forEach((value) => {
+
+            const item = document.createElement("div");
+
+            item.className = "item";
+            item.textContent = value;
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+    // QUEUE
+
+    function enqueue() {
+
+        const value = getInputValue();
+
+        if (value === null) return;
+
+        queue.push(value);
+
+        renderQueue();
+
+        showStatus(`QUEUE // "${value}" added to REAR.`);
+        addHistory(`ENQUEUE // ${value}`);
+
+    }
+
+    function dequeue() {
+
+        if (queue.length === 0) {
+            showStatus("QUEUE // Cannot DEQUEUE. Queue is empty.");
+            return;
+        }
+
+        const value = queue.shift();
+
+        renderQueue();
+
+        showStatus(`QUEUE // "${value}" removed from FRONT.`);
+        addHistory(`DEQUEUE // ${value}`);
+
+    }
+
+    function peekQueue() {
+
+        if (queue.length === 0) {
+            showStatus("QUEUE // No FRONT item available.");
+            return;
+        }
+
+        const value = queue[0];
+
+        showStatus(`QUEUE // FRONT = "${value}"`);
+        addHistory(`FRONT QUEUE // ${value}`);
+
+    }
+
+    function clearQueue() {
+
+        queue = [];
+
+        renderQueue();
+
+        showStatus("QUEUE // All data cleared.");
+        addHistory("CLEAR QUEUE");
+
+    }
+
+    function renderQueue() {
+
+        const container = document.getElementById("queueContainer");
+
+        container.innerHTML = "";
+
+        if (queue.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty">QUEUE EMPTY // NO DATA</div>';
+
+            return;
+        }
+
+        queue.forEach((value, index) => {
+
+            const wrapper = document.createElement("div");
+
+            wrapper.className = "queue-item-wrapper";
+
+            const item = document.createElement("div");
+
+            item.className = "item queue-item";
+            item.textContent = value;
+
+            const label = document.createElement("div");
+
+            label.className = "queue-label";
+
+            if (index === 0) {
+                label.textContent = "FRONT";
+            }
+
+            if (index === queue.length - 1) {
+                label.textContent = "REAR";
+            }
+
+            wrapper.appendChild(item);
+            wrapper.appendChild(label);
+
+            container.appendChild(wrapper);
+
+        });
+
+    }
+
+    // STATUS
+
+    function showStatus(message) {
+
+        document.getElementById("status").textContent = message;
+
+    }
+
+    // HISTORY
+
+    function addHistory(message) {
+
+        const history = document.getElementById("historyList");
+
+        if (
+            history.children.length === 1 &&
+            history.children[0].textContent ===
+            "SYSTEM // No operations recorded."
+        ) {
+            history.innerHTML = "";
+        }
+
+        const entry = document.createElement("li");
+
+        const time = new Date().toLocaleTimeString();
+
+        entry.textContent = `[${time}] ${message}`;
+
+        history.prepend(entry);
+
+    }
+
+</script>
+
+</body>
+</html>
+```
