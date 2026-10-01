@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STACK // QUEUE</title>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
+    <style>
         :root {
             --bg: #090708;
             --panel: #140b0d;
@@ -20,8 +21,7 @@
             --gold-dark: #927331;
             --text: #eee4d2;
             --muted: #9f9180;
-            --danger: #a93245;
-            --border: rgba(214, 173, 84, 0.35);
+            --danger: #b44b4b;
         }
 
         * {
@@ -31,12 +31,14 @@
         }
 
         body {
-            font-family: "Rajdhani", sans-serif;
-            background:
-                radial-gradient(circle at 50% -10%, rgba(94, 23, 39, 0.45), transparent 45%),
-                linear-gradient(135deg, #090708, #12090c 50%, #080607);
-            color: var(--text);
             min-height: 100vh;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(94, 23, 39, 0.2), transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(214, 173, 84, 0.08), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            font-family: "Rajdhani", sans-serif;
+            padding: 30px;
             overflow-x: hidden;
         }
 
@@ -46,175 +48,150 @@
             inset: 0;
             pointer-events: none;
             background-image:
-                linear-gradient(rgba(214,173,84,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(214,173,84,0.025) 1px, transparent 1px);
+                linear-gradient(rgba(214, 173, 84, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(214, 173, 84, 0.025) 1px, transparent 1px);
             background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
         }
 
         /* HEADER */
 
         header {
-            position: relative;
             text-align: center;
-            padding: 35px 20px 30px;
-            border-bottom: 1px solid var(--border);
-            background: rgba(10, 6, 8, 0.85);
+            margin-bottom: 30px;
+            animation: headerReveal 0.8s ease forwards;
         }
 
-        header::after {
-            content: "";
-            position: absolute;
-            bottom: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 180px;
-            height: 2px;
-            background: var(--gold);
-            box-shadow: 0 0 15px var(--gold);
-        }
-
-        .system-label {
-            color: var(--gold);
+        .logo {
             font-family: "Share Tech Mono", monospace;
-            font-size: 12px;
-            letter-spacing: 4px;
-            margin-bottom: 8px;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            letter-spacing: 10px;
+            color: var(--gold);
+            text-shadow:
+                0 0 10px rgba(214, 173, 84, 0.4),
+                0 0 25px rgba(214, 173, 84, 0.15);
         }
 
-        header h1 {
-            font-size: clamp(36px, 6vw, 62px);
-            letter-spacing: 7px;
-            font-weight: 700;
-            color: var(--gold-light);
-            text-shadow: 0 0 18px rgba(214,173,84,0.35);
-        }
-
-        header p {
-            margin-top: 8px;
+        .subtitle {
             color: var(--muted);
-            letter-spacing: 2px;
-            font-size: 14px;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
 
-        /* MAIN */
-
-        .container {
-            width: 92%;
-            max-width: 1250px;
-            margin: 35px auto;
-        }
-
-        /* INPUT TERMINAL */
+        /* INPUT */
 
         .terminal {
-            position: relative;
-            background: linear-gradient(145deg, rgba(29,14,18,0.95), rgba(13,8,10,0.95));
-            border: 1px solid var(--border);
-            padding: 22px;
+            background: var(--panel);
+            border: 1px solid var(--gold-dark);
+            padding: 18px;
+            display: flex;
+            gap: 12px;
             margin-bottom: 25px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.35);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.7s ease 0.2s both;
         }
 
         .terminal::before {
-            content: "INPUT TERMINAL";
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            padding: 0 10px;
-            background: var(--bg);
+            content: "INPUT //";
             color: var(--gold);
             font-family: "Share Tech Mono", monospace;
-            font-size: 11px;
-            letter-spacing: 2px;
-        }
-
-        .input-area {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            align-self: center;
+            white-space: nowrap;
         }
 
         input {
             flex: 1;
-            min-width: 220px;
-            background: #090607;
-            border: 1px solid var(--gold-dark);
+            background: #080607;
+            border: 1px solid var(--maroon);
             color: var(--gold-light);
             padding: 13px 15px;
             font-family: "Share Tech Mono", monospace;
-            font-size: 15px;
             outline: none;
-            transition: 0.2s;
+            transition: 0.25s ease;
         }
 
         input:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 12px rgba(214,173,84,0.2);
-        }
-
-        input::placeholder {
-            color: #655c52;
+            box-shadow: 0 0 12px rgba(214, 173, 84, 0.2);
         }
 
         /* BUTTONS */
 
-        .btn {
+        button {
             position: relative;
+            overflow: hidden;
             border: 1px solid var(--gold-dark);
             background: var(--maroon-dark);
             color: var(--gold-light);
             padding: 12px 18px;
             font-family: "Rajdhani", sans-serif;
-            font-size: 14px;
             font-weight: 700;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: 0.2s;
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
         }
 
-        .btn:hover {
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(241, 210, 123, 0.2),
+                transparent
+            );
+            transition: left 0.45s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
             background: var(--maroon);
             border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(214,173,84,0.25);
-            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(214, 173, 84, 0.25);
         }
 
-        .btn:active {
-            transform: translateY(0);
+        button:hover::after {
+            left: 140%;
         }
 
-        /* TOOLTIP */
+        button:active {
+            transform: translateY(0) scale(0.96);
+        }
 
         .tooltip {
-            position: relative;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
             position: absolute;
-            z-index: 20;
             bottom: calc(100% + 10px);
             left: 50%;
             transform: translateX(-50%) translateY(5px);
-            width: max-content;
-            max-width: 250px;
-            padding: 9px 12px;
             background: #080607;
             border: 1px solid var(--gold-dark);
             color: var(--text);
-            font-family: "Share Tech Mono", monospace;
-            font-size: 11px;
+            padding: 8px 10px;
+            width: 210px;
+            font-size: 0.75rem;
             font-weight: 400;
             letter-spacing: 0;
-            line-height: 1.4;
-            text-align: center;
             opacity: 0;
             pointer-events: none;
-            transition: 0.2s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transition: 0.2s ease;
+            z-index: 50;
         }
 
-        .tooltip:hover::after {
+        button:hover .tooltip {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
@@ -222,16 +199,22 @@
         /* STATUS */
 
         .status {
-            margin-top: 15px;
-            padding: 11px 14px;
+            min-height: 38px;
+            margin-bottom: 20px;
+            padding: 10px 15px;
             border-left: 3px solid var(--gold);
-            background: rgba(214,173,84,0.05);
+            background: rgba(94, 23, 39, 0.25);
             color: var(--gold-light);
             font-family: "Share Tech Mono", monospace;
-            font-size: 12px;
+            opacity: 0;
+            transform: translateX(-15px);
         }
 
-        /* STRUCTURES */
+        .status.show {
+            animation: statusIn 0.35s ease forwards;
+        }
+
+        /* MAIN GRID */
 
         .structures {
             display: grid;
@@ -239,209 +222,188 @@
             gap: 25px;
         }
 
-        .card {
+        .panel {
+            background: linear-gradient(
+                145deg,
+                rgba(29, 14, 18, 0.96),
+                rgba(20, 11, 13, 0.96)
+            );
+            border: 1px solid var(--maroon);
+            min-height: 470px;
+            padding: 22px;
             position: relative;
-            background: linear-gradient(145deg, rgba(29,14,18,0.96), rgba(12,7,9,0.96));
-            border: 1px solid var(--border);
-            padding: 25px;
-            min-width: 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            overflow: visible;
+            animation: panelReveal 0.7s ease both;
         }
 
-        .card::before,
-        .card::after {
-            content: "";
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            border-color: var(--gold);
-            pointer-events: none;
+        .panel:nth-child(2) {
+            animation-delay: 0.15s;
         }
 
-        .card::before {
-            top: -1px;
-            left: -1px;
-            border-top: 2px solid;
-            border-left: 2px solid;
+        .panel:hover {
+            border-color: var(--gold-dark);
         }
 
-        .card::after {
-            bottom: -1px;
-            right: -1px;
-            border-bottom: 2px solid;
-            border-right: 2px solid;
-        }
-
-        .card-header {
+        .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            border-bottom: 1px solid var(--maroon);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
         }
 
-        .card h2 {
-            color: var(--gold-light);
-            font-size: 27px;
-            letter-spacing: 3px;
-        }
-
-        .type-badge {
+        .panel-title {
             font-family: "Share Tech Mono", monospace;
             color: var(--gold);
-            font-size: 11px;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .badge {
             border: 1px solid var(--gold-dark);
-            padding: 4px 8px;
+            color: var(--gold-light);
+            padding: 4px 9px;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
         }
 
-        .description {
-            color: var(--muted);
-            margin-bottom: 18px;
-            font-family: "Share Tech Mono", monospace;
-            font-size: 12px;
-        }
+        /* DATA STRUCTURES */
 
-        .operation-buttons {
+        .structure-area {
+            min-height: 260px;
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px dashed var(--maroon);
+            padding: 20px;
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 18px;
         }
 
-        /* STACK */
-
-        .stack-container {
-            min-height: 390px;
-            border: 1px dashed rgba(214,173,84,0.3);
-            background: rgba(5,4,5,0.55);
-            padding: 15px;
+        .stack-visual {
+            width: 80%;
+            min-height: 230px;
             display: flex;
             flex-direction: column-reverse;
             justify-content: flex-start;
+            align-items: center;
             gap: 7px;
             position: relative;
         }
 
-        .stack-container::before {
+        .stack-visual::before {
             content: "TOP";
             position: absolute;
-            top: 8px;
-            right: 10px;
+            top: -17px;
+            right: -30px;
             color: var(--gold-dark);
             font-family: "Share Tech Mono", monospace;
-            font-size: 10px;
+            font-size: 0.7rem;
         }
 
-        /* QUEUE */
-
-        .queue-container {
-            min-height: 150px;
-            border: 1px dashed rgba(214,173,84,0.3);
-            background: rgba(5,4,5,0.55);
-            padding: 15px;
+        .queue-visual {
+            width: 100%;
+            min-height: 130px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             overflow-x: auto;
+            padding: 20px 10px;
             position: relative;
         }
 
-        .queue-container::before {
+        .queue-visual::before {
             content: "FRONT";
             position: absolute;
-            top: 8px;
-            left: 10px;
+            left: 0;
+            top: -5px;
             color: var(--gold-dark);
             font-family: "Share Tech Mono", monospace;
-            font-size: 10px;
+            font-size: 0.7rem;
         }
 
-        .queue-container::after {
+        .queue-visual::after {
             content: "REAR";
             position: absolute;
-            top: 8px;
-            right: 10px;
+            right: 0;
+            top: -5px;
             color: var(--gold-dark);
             font-family: "Share Tech Mono", monospace;
-            font-size: 10px;
+            font-size: 0.7rem;
         }
 
-        /* ITEMS */
-
-        .item {
-            padding: 14px;
-            min-width: 85px;
-            color: var(--gold-light);
-            text-align: center;
-            font-family: "Share Tech Mono", monospace;
-            font-weight: bold;
-            background: linear-gradient(135deg, #5e1727, #3a1019);
+        .data-item {
+            min-width: 90px;
+            min-height: 45px;
+            padding: 10px 15px;
             border: 1px solid var(--gold-dark);
-            box-shadow: inset 0 0 12px rgba(214,173,84,0.05);
-            animation: appear 0.25s ease;
-        }
-
-        .item:hover {
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(214,173,84,0.2);
-        }
-
-        .queue-item {
-            background: linear-gradient(135deg, #3f1420, #641b2c);
-        }
-
-        .queue-item-wrapper {
+            background: linear-gradient(
+                135deg,
+                var(--maroon-dark),
+                #17090c
+            );
+            color: var(--gold-light);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
+            font-family: "Share Tech Mono", monospace;
+            box-shadow: 0 0 8px rgba(214, 173, 84, 0.08);
+            animation: itemAppear 0.4s cubic-bezier(.2,.8,.2,1) both;
+            position: relative;
+        }
+
+        .data-item::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border: 1px solid transparent;
+            transition: 0.25s ease;
+        }
+
+        .data-item:hover::before {
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(214, 173, 84, 0.2);
+        }
+
+        .queue-visual .data-item {
             flex-shrink: 0;
         }
 
-        .queue-label {
+        .empty {
+            color: var(--muted);
             font-family: "Share Tech Mono", monospace;
-            color: var(--gold-dark);
-            font-size: 9px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            animation: blink 2s infinite;
         }
 
-        .empty {
-            width: 100%;
-            text-align: center;
-            color: #5f554d;
-            padding: 50px 10px;
-            font-family: "Share Tech Mono", monospace;
-            font-size: 12px;
+        /* CONTROLS */
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .controls button {
+            font-size: 0.8rem;
+            padding: 10px 5px;
         }
 
         /* INFO */
 
-        .info-panel {
-            margin-top: 25px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .info-box {
-            border: 1px solid rgba(214,173,84,0.2);
-            background: rgba(29,14,18,0.65);
-            padding: 18px;
-        }
-
-        .info-box h3 {
-            color: var(--gold);
-            font-size: 17px;
-            letter-spacing: 2px;
-            margin-bottom: 7px;
-        }
-
-        .info-box p {
+        .info {
+            margin-top: 18px;
+            padding: 13px;
+            border-left: 2px solid var(--gold-dark);
+            background: rgba(214, 173, 84, 0.035);
             color: var(--muted);
-            font-family: "Share Tech Mono", monospace;
-            font-size: 11px;
-            line-height: 1.6;
+            font-size: 0.85rem;
+            line-height: 1.4;
         }
 
-        .info-box strong {
+        .info strong {
             color: var(--gold-light);
         }
 
@@ -449,45 +411,163 @@
 
         .history {
             margin-top: 25px;
+            background: var(--panel);
+            border: 1px solid var(--maroon);
+            padding: 20px;
+            animation: slideUp 0.7s ease 0.4s both;
         }
 
-        .history h2 {
-            color: var(--gold-light);
-            margin-bottom: 15px;
-            letter-spacing: 3px;
+        .history-title {
+            color: var(--gold);
+            font-family: "Share Tech Mono", monospace;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
         }
 
         #historyList {
-            list-style: none;
-            max-height: 220px;
+            max-height: 180px;
             overflow-y: auto;
-            border: 1px solid rgba(214,173,84,0.15);
         }
 
-        #historyList li {
-            padding: 10px 13px;
-            border-bottom: 1px solid rgba(214,173,84,0.08);
+        .history-item {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(94, 23, 39, 0.5);
             color: var(--muted);
             font-family: "Share Tech Mono", monospace;
-            font-size: 11px;
+            font-size: 0.8rem;
+            animation: historyIn 0.35s ease both;
         }
 
-        #historyList li:first-child {
-            color: var(--gold-light);
+        .history-item span {
+            color: var(--gold-dark);
+            margin-right: 8px;
         }
 
-        /* ANIMATION */
+        /* RIPPLE */
 
-        @keyframes appear {
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(241, 210, 123, 0.35);
+            transform: scale(0);
+            animation: ripple 0.55s ease-out;
+            pointer-events: none;
+        }
+
+        /* ANIMATIONS */
+
+        @keyframes headerReveal {
             from {
                 opacity: 0;
-                transform: translateY(10px) scale(0.96);
+                transform: translateY(-25px);
+                letter-spacing: 18px;
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                letter-spacing: 10px;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes panelReveal {
+            from {
+                opacity: 0;
+                transform: translateY(35px) scale(0.98);
             }
 
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
+        }
+
+        @keyframes itemAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.7) translateY(15px);
+                filter: brightness(2);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: brightness(1);
+            }
+        }
+
+        @keyframes historyIn {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes statusIn {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 0.45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes clearFlash {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+        }
+
+        .clear-animation {
+            animation: clearFlash 0.3s ease forwards;
         }
 
         /* SCROLLBAR */
@@ -498,48 +578,52 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #090607;
+            background: #0b0708;
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--maroon);
-            border: 1px solid var(--gold-dark);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold-dark);
         }
 
         /* RESPONSIVE */
 
         @media (max-width: 850px) {
-            .structures,
-            .info-panel {
+            body {
+                padding: 18px;
+            }
+
+            .structures {
                 grid-template-columns: 1fr;
             }
 
-            .stack-container {
-                min-height: 300px;
+            .terminal {
+                flex-wrap: wrap;
+            }
+
+            .terminal::before {
+                width: 100%;
             }
         }
 
-        @media (max-width: 600px) {
-            .container {
-                width: 94%;
-                margin: 25px auto;
+        @media (max-width: 500px) {
+            .logo {
+                letter-spacing: 5px;
             }
 
-            .input-area {
+            .controls {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .terminal {
                 flex-direction: column;
             }
 
-            input,
-            .btn {
+            .terminal button {
                 width: 100%;
-            }
-
-            header h1 {
-                letter-spacing: 3px;
-            }
-
-            .tooltip::after {
-                display: none;
             }
         }
     </style>
@@ -547,429 +631,600 @@
 
 <body>
 
-<header>
-    <div class="system-label">DATA STRUCTURE // INTERFACE</div>
-    <h1>STACK // QUEUE</h1>
-    <p>Interactive Data Structure Terminal</p>
-</header>
+<div class="container">
 
-<main class="container">
+    <header>
+        <div class="logo">STACK // QUEUE</div>
+        <div class="subtitle">INTERACTIVE DATA STRUCTURE TERMINAL</div>
+    </header>
 
-    <!-- INPUT -->
-    <section class="terminal">
+    <div class="terminal">
+        <input
+            type="text"
+            id="inputValue"
+            placeholder="ENTER VALUE..."
+            autocomplete="off"
+        >
 
-        <div class="input-area">
+        <button onclick="pushStack(event)">
+            PUSH
+            <span class="tooltip">Adds the entered value to the TOP of the Stack.</span>
+        </button>
 
-            <input
-                type="text"
-                id="valueInput"
-                placeholder="ENTER VALUE..."
-                onkeydown="handleEnter(event)"
-            >
+        <button onclick="enqueue(event)">
+            ENQUEUE
+            <span class="tooltip">Adds the entered value to the REAR of the Queue.</span>
+        </button>
+    </div>
 
-            <button
-                class="btn tooltip"
-                data-tooltip="Adds the entered value to the TOP of the Stack."
-                onclick="pushStack()">
-                PUSH
-            </button>
+    <div class="status" id="status"></div>
 
-            <button
-                class="btn tooltip"
-                data-tooltip="Adds the entered value to the REAR of the Queue."
-                onclick="enqueue()">
-                ENQUEUE
-            </button>
-
-        </div>
-
-        <div class="status" id="status">
-            SYSTEM READY // Awaiting operation...
-        </div>
-
-    </section>
-
-    <!-- DATA STRUCTURES -->
-    <section class="structures">
+    <div class="structures">
 
         <!-- STACK -->
-        <div class="card">
 
-            <div class="card-header">
-                <h2>STACK</h2>
-                <span class="type-badge">LIFO</span>
+        <section class="panel">
+
+            <div class="panel-header">
+                <div class="panel-title">STACK</div>
+                <div class="badge">LIFO</div>
             </div>
 
-            <p class="description">
-                LAST IN // FIRST OUT
-            </p>
+            <div class="structure-area">
+                <div class="stack-visual" id="stackVisual">
+                    <div class="empty">[ STACK EMPTY ]</div>
+                </div>
+            </div>
 
-            <div class="operation-buttons">
+            <div class="controls">
 
-                <button
-                    class="btn tooltip"
-                    data-tooltip="Removes the most recently added item from the TOP of the Stack."
-                    onclick="popStack()">
+                <button onclick="popStack(event)">
                     POP
+                    <span class="tooltip">
+                        Removes the most recently added item from the TOP of the Stack.
+                    </span>
                 </button>
 
-                <button
-                    class="btn tooltip"
-                    data-tooltip="Displays the TOP item without removing it."
-                    onclick="peekStack()">
+                <button onclick="peekStack(event)">
                     PEEK
+                    <span class="tooltip">
+                        Displays the TOP item without removing it.
+                    </span>
                 </button>
 
-                <button
-                    class="btn tooltip"
-                    data-tooltip="Removes every item currently stored in the Stack."
-                    onclick="clearStack()">
+                <button onclick="clearStack(event)">
                     CLEAR
+                    <span class="tooltip">
+                        Removes every item currently stored in the Stack.
+                    </span>
+                </button>
+
+                <button onclick="stackCount(event)">
+                    COUNT
+                    <span class="tooltip">
+                        Displays the number of items currently in the Stack.
+                    </span>
                 </button>
 
             </div>
 
-            <div class="stack-container" id="stackContainer">
-                <div class="empty">STACK EMPTY // NO DATA</div>
+            <div class="info">
+                <strong>LIFO:</strong>
+                Last In, First Out. The newest element added to the Stack
+                is the first element removed.
             </div>
 
-        </div>
+        </section>
 
         <!-- QUEUE -->
-        <div class="card">
 
-            <div class="card-header">
-                <h2>QUEUE</h2>
-                <span class="type-badge">FIFO</span>
+        <section class="panel">
+
+            <div class="panel-header">
+                <div class="panel-title">QUEUE</div>
+                <div class="badge">FIFO</div>
             </div>
 
-            <p class="description">
-                FIRST IN // FIRST OUT
-            </p>
+            <div class="structure-area">
+                <div class="queue-visual" id="queueVisual">
+                    <div class="empty">[ QUEUE EMPTY ]</div>
+                </div>
+            </div>
 
-            <div class="operation-buttons">
+            <div class="controls">
 
-                <button
-                    class="btn tooltip"
-                    data-tooltip="Removes the FIRST item from the FRONT of the Queue."
-                    onclick="dequeue()">
+                <button onclick="dequeue(event)">
                     DEQUEUE
+                    <span class="tooltip">
+                        Removes the FIRST item from the FRONT of the Queue.
+                    </span>
                 </button>
 
-                <button
-                    class="btn tooltip"
-                    data-tooltip="Displays the FRONT item without removing it."
-                    onclick="peekQueue()">
+                <button onclick="frontQueue(event)">
                     FRONT
+                    <span class="tooltip">
+                        Displays the FRONT item without removing it.
+                    </span>
                 </button>
 
-                <button
-                    class="btn tooltip"
-                    data-tooltip="Removes every item currently stored in the Queue."
-                    onclick="clearQueue()">
+                <button onclick="clearQueue(event)">
                     CLEAR
+                    <span class="tooltip">
+                        Removes every item currently stored in the Queue.
+                    </span>
+                </button>
+
+                <button onclick="queueCount(event)">
+                    COUNT
+                    <span class="tooltip">
+                        Displays the number of items currently in the Queue.
+                    </span>
                 </button>
 
             </div>
 
-            <div class="queue-container" id="queueContainer">
-                <div class="empty">QUEUE EMPTY // NO DATA</div>
+            <div class="info">
+                <strong>FIFO:</strong>
+                First In, First Out. The first element added to the Queue
+                is the first element removed.
             </div>
 
-        </div>
+        </section>
 
-    </section>
-
-    <!-- EXPLANATION -->
-    <section class="info-panel">
-
-        <div class="info-box">
-            <h3>STACK // LIFO</h3>
-            <p>
-                A Stack follows
-                <strong>Last In, First Out</strong>.
-                The newest item is placed at the top and is the first item removed.
-            </p>
-        </div>
-
-        <div class="info-box">
-            <h3>QUEUE // FIFO</h3>
-            <p>
-                A Queue follows
-                <strong>First In, First Out</strong>.
-                The first item added is positioned at the front and is the first item removed.
-            </p>
-        </div>
-
-    </section>
+    </div>
 
     <!-- HISTORY -->
-    <section class="card history">
 
-        <h2>OPERATION LOG</h2>
+    <section class="history">
 
-        <ul id="historyList">
-            <li>SYSTEM // No operations recorded.</li>
-        </ul>
+        <div class="history-title">
+            OPERATION HISTORY //
+        </div>
+
+        <div id="historyList">
+            <div class="history-item">
+                <span>--:--:--</span>
+                SYSTEM READY
+            </div>
+        </div>
 
     </section>
 
-</main>
+</div>
 
 <script>
 
     let stack = [];
     let queue = [];
 
-    // INPUT
+    const input = document.getElementById("inputValue");
+    const stackVisual = document.getElementById("stackVisual");
+    const queueVisual = document.getElementById("queueVisual");
+    const historyList = document.getElementById("historyList");
+    const statusBox = document.getElementById("status");
 
-    function getInputValue() {
+    /* STATUS */
 
-        const input = document.getElementById("valueInput");
+    function showStatus(message) {
+
+        statusBox.classList.remove("show");
+
+        void statusBox.offsetWidth;
+
+        statusBox.textContent = `SYSTEM // ${message}`;
+        statusBox.classList.add("show");
+
+    }
+
+    /* HISTORY */
+
+    function addHistory(message) {
+
+        const item = document.createElement("div");
+
+        item.className = "history-item";
+
+        const time = new Date().toLocaleTimeString();
+
+        item.innerHTML = `<span>${time}</span>${message}`;
+
+        historyList.prepend(item);
+
+    }
+
+    /* BUTTON RIPPLE */
+
+    function createRipple(event) {
+
+        const button = event.currentTarget;
+
+        const circle = document.createElement("span");
+
+        const diameter = Math.max(
+            button.clientWidth,
+            button.clientHeight
+        );
+
+        const rect = button.getBoundingClientRect();
+
+        circle.style.width = circle.style.height = `${diameter}px`;
+
+        circle.style.left =
+            `${event.clientX - rect.left - diameter / 2}px`;
+
+        circle.style.top =
+            `${event.clientY - rect.top - diameter / 2}px`;
+
+        circle.classList.add("ripple");
+
+        const oldRipple = button.querySelector(".ripple");
+
+        if (oldRipple) {
+            oldRipple.remove();
+        }
+
+        button.appendChild(circle);
+
+    }
+
+    /* STACK */
+
+    function pushStack(event) {
+
+        createRipple(event);
+
         const value = input.value.trim();
 
         if (value === "") {
-            showStatus("WARNING // Enter a value before performing this operation.");
-            return null;
+
+            showStatus("ENTER A VALUE FIRST.");
+
+            return;
         }
-
-        input.value = "";
-        input.focus();
-
-        return value;
-    }
-
-    function handleEnter(event) {
-
-        if (event.key === "Enter") {
-            pushStack();
-        }
-
-    }
-
-    // STACK
-
-    function pushStack() {
-
-        const value = getInputValue();
-
-        if (value === null) return;
 
         stack.push(value);
 
+        addHistory(`STACK // PUSH "${value}"`);
+
+        showStatus(`"${value}" PUSHED TO TOP.`);
+
+        input.value = "";
+
         renderStack();
 
-        showStatus(`STACK // "${value}" pushed to TOP.`);
-        addHistory(`PUSH // ${value}`);
+        input.focus();
 
     }
 
-    function popStack() {
+    function popStack(event) {
+
+        createRipple(event);
 
         if (stack.length === 0) {
-            showStatus("STACK // Cannot POP. Stack is empty.");
+
+            showStatus("STACK IS EMPTY.");
+
             return;
         }
 
         const value = stack.pop();
 
-        renderStack();
+        addHistory(`STACK // POP "${value}"`);
 
-        showStatus(`STACK // "${value}" removed from TOP.`);
-        addHistory(`POP // ${value}`);
+        showStatus(`"${value}" REMOVED FROM TOP.`);
+
+        renderStack();
 
     }
 
-    function peekStack() {
+    function peekStack(event) {
+
+        createRipple(event);
 
         if (stack.length === 0) {
-            showStatus("STACK // No TOP item available.");
+
+            showStatus("STACK IS EMPTY.");
+
             return;
         }
 
         const value = stack[stack.length - 1];
 
-        showStatus(`STACK // TOP = "${value}"`);
-        addHistory(`PEEK STACK // ${value}`);
+        addHistory(`STACK // PEEK "${value}"`);
+
+        showStatus(`TOP VALUE: "${value}".`);
+
+        highlightLast(stackVisual);
 
     }
 
-    function clearStack() {
+    function clearStack(event) {
 
-        stack = [];
-
-        renderStack();
-
-        showStatus("STACK // All data cleared.");
-        addHistory("CLEAR STACK");
-
-    }
-
-    function renderStack() {
-
-        const container = document.getElementById("stackContainer");
-
-        container.innerHTML = "";
+        createRipple(event);
 
         if (stack.length === 0) {
 
-            container.innerHTML =
-                '<div class="empty">STACK EMPTY // NO DATA</div>';
+            showStatus("STACK IS ALREADY EMPTY.");
 
             return;
         }
 
-        stack.forEach((value) => {
+        stack = [];
 
-            const item = document.createElement("div");
+        addHistory("STACK // CLEAR");
 
-            item.className = "item";
-            item.textContent = value;
+        showStatus("STACK CLEARED.");
 
-            container.appendChild(item);
-
-        });
+        renderStack();
 
     }
 
-    // QUEUE
+    function stackCount(event) {
 
-    function enqueue() {
+        createRipple(event);
 
-        const value = getInputValue();
+        addHistory(`STACK // COUNT ${stack.length}`);
 
-        if (value === null) return;
+        showStatus(`STACK CONTAINS ${stack.length} ITEM(S).`);
+
+    }
+
+    /* QUEUE */
+
+    function enqueue(event) {
+
+        createRipple(event);
+
+        const value = input.value.trim();
+
+        if (value === "") {
+
+            showStatus("ENTER A VALUE FIRST.");
+
+            return;
+        }
 
         queue.push(value);
 
+        addHistory(`QUEUE // ENQUEUE "${value}"`);
+
+        showStatus(`"${value}" ADDED TO REAR.`);
+
+        input.value = "";
+
         renderQueue();
 
-        showStatus(`QUEUE // "${value}" added to REAR.`);
-        addHistory(`ENQUEUE // ${value}`);
+        input.focus();
 
     }
 
-    function dequeue() {
+    function dequeue(event) {
+
+        createRipple(event);
 
         if (queue.length === 0) {
-            showStatus("QUEUE // Cannot DEQUEUE. Queue is empty.");
+
+            showStatus("QUEUE IS EMPTY.");
+
             return;
         }
 
         const value = queue.shift();
 
-        renderQueue();
+        addHistory(`QUEUE // DEQUEUE "${value}"`);
 
-        showStatus(`QUEUE // "${value}" removed from FRONT.`);
-        addHistory(`DEQUEUE // ${value}`);
+        showStatus(`"${value}" REMOVED FROM FRONT.`);
+
+        renderQueue();
 
     }
 
-    function peekQueue() {
+    function frontQueue(event) {
+
+        createRipple(event);
 
         if (queue.length === 0) {
-            showStatus("QUEUE // No FRONT item available.");
+
+            showStatus("QUEUE IS EMPTY.");
+
             return;
         }
 
         const value = queue[0];
 
-        showStatus(`QUEUE // FRONT = "${value}"`);
-        addHistory(`FRONT QUEUE // ${value}`);
+        addHistory(`QUEUE // FRONT "${value}"`);
+
+        showStatus(`FRONT VALUE: "${value}".`);
+
+        highlightFirst(queueVisual);
 
     }
 
-    function clearQueue() {
+    function clearQueue(event) {
 
-        queue = [];
-
-        renderQueue();
-
-        showStatus("QUEUE // All data cleared.");
-        addHistory("CLEAR QUEUE");
-
-    }
-
-    function renderQueue() {
-
-        const container = document.getElementById("queueContainer");
-
-        container.innerHTML = "";
+        createRipple(event);
 
         if (queue.length === 0) {
 
-            container.innerHTML =
-                '<div class="empty">QUEUE EMPTY // NO DATA</div>';
+            showStatus("QUEUE IS ALREADY EMPTY.");
+
+            return;
+        }
+
+        queue = [];
+
+        addHistory("QUEUE // CLEAR");
+
+        showStatus("QUEUE CLEARED.");
+
+        renderQueue();
+
+    }
+
+    function queueCount(event) {
+
+        createRipple(event);
+
+        addHistory(`QUEUE // COUNT ${queue.length}`);
+
+        showStatus(`QUEUE CONTAINS ${queue.length} ITEM(S).`);
+
+    }
+
+    /* RENDER STACK */
+
+    function renderStack() {
+
+        stackVisual.innerHTML = "";
+
+        if (stack.length === 0) {
+
+            const empty = document.createElement("div");
+
+            empty.className = "empty";
+
+            empty.textContent = "[ STACK EMPTY ]";
+
+            stackVisual.appendChild(empty);
+
+            return;
+        }
+
+        stack.forEach((value, index) => {
+
+            const item = document.createElement("div");
+
+            item.className = "data-item";
+
+            item.textContent = value;
+
+            item.style.animationDelay =
+                `${index * 0.04}s`;
+
+            stackVisual.appendChild(item);
+
+        });
+
+    }
+
+    /* RENDER QUEUE */
+
+    function renderQueue() {
+
+        queueVisual.innerHTML = "";
+
+        if (queue.length === 0) {
+
+            const empty = document.createElement("div");
+
+            empty.className = "empty";
+
+            empty.textContent = "[ QUEUE EMPTY ]";
+
+            queueVisual.appendChild(empty);
 
             return;
         }
 
         queue.forEach((value, index) => {
 
-            const wrapper = document.createElement("div");
-
-            wrapper.className = "queue-item-wrapper";
-
             const item = document.createElement("div");
 
-            item.className = "item queue-item";
+            item.className = "data-item";
+
             item.textContent = value;
 
-            const label = document.createElement("div");
+            item.style.animationDelay =
+                `${index * 0.04}s`;
 
-            label.className = "queue-label";
-
-            if (index === 0) {
-                label.textContent = "FRONT";
-            }
-
-            if (index === queue.length - 1) {
-                label.textContent = "REAR";
-            }
-
-            wrapper.appendChild(item);
-            wrapper.appendChild(label);
-
-            container.appendChild(wrapper);
+            queueVisual.appendChild(item);
 
         });
 
     }
 
-    // STATUS
+    /* HIGHLIGHT */
 
-    function showStatus(message) {
+    function highlightLast(container) {
 
-        document.getElementById("status").textContent = message;
+        const items =
+            container.querySelectorAll(".data-item");
+
+        if (items.length === 0) return;
+
+        const item = items[items.length - 1];
+
+        item.animate(
+            [
+                {
+                    boxShadow:
+                        "0 0 8px rgba(214,173,84,0.1)"
+                },
+                {
+                    boxShadow:
+                        "0 0 25px rgba(241,210,123,0.8)"
+                },
+                {
+                    boxShadow:
+                        "0 0 8px rgba(214,173,84,0.1)"
+                }
+            ],
+            {
+                duration: 700,
+                easing: "ease-in-out"
+            }
+        );
 
     }
 
-    // HISTORY
+    function highlightFirst(container) {
 
-    function addHistory(message) {
+        const items =
+            container.querySelectorAll(".data-item");
 
-        const history = document.getElementById("historyList");
+        if (items.length === 0) return;
 
-        if (
-            history.children.length === 1 &&
-            history.children[0].textContent ===
-            "SYSTEM // No operations recorded."
-        ) {
-            history.innerHTML = "";
+        const item = items[0];
+
+        item.animate(
+            [
+                {
+                    boxShadow:
+                        "0 0 8px rgba(214,173,84,0.1)"
+                },
+                {
+                    boxShadow:
+                        "0 0 25px rgba(241,210,123,0.8)"
+                },
+                {
+                    boxShadow:
+                        "0 0 8px rgba(214,173,84,0.1)"
+                }
+            ],
+            {
+                duration: 700,
+                easing: "ease-in-out"
+            }
+        );
+
+    }
+
+    /* ENTER KEY */
+
+    input.addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+
+            pushStack({
+                currentTarget:
+                    document.querySelector(".terminal button")
+            });
+
         }
 
-        const entry = document.createElement("li");
-
-        const time = new Date().toLocaleTimeString();
-
-        entry.textContent = `[${time}] ${message}`;
-
-        history.prepend(entry);
-
-    }
+    });
 
 </script>
 
 </body>
 </html>
-```
